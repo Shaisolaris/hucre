@@ -679,7 +679,10 @@ function formatFraction(value: number, fmt: string): string {
     // already answered; asking it a second time off the raw format text is
     // how the two answers drift apart (a "$" prefix defeated the old test).
     // The blanked fraction area stays between the number and the suffix.
-    const wholeText = (intPart < 0 ? "-" : "") + head.prefix + String(Math.abs(intPart))
+    // Same sign rule as below: Math.trunc(-0.1) is -0, so the sign comes from
+    // the value, and a format that writes its own "-" is left to it.
+    const wholeSign = value < 0 && !head.prefix.includes("-") ? "-" : ""
+    const wholeText = wholeSign + head.prefix + String(Math.abs(intPart))
     if (hasIntPart && intPart !== 0) {
       return wholeText + tail
     }

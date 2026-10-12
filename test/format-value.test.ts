@@ -91,6 +91,10 @@ describe("formatValue — Currency", () => {
     expect(formatValue(-1.5, "$# ?/?")).toBe("-$1 1/2")
     expect(formatValue(-0.5, "$?/?")).toBe("-$1/2")
     expect(formatValue(-2, "$# ?/?")).toBe("-$2")
+    // The fraction rounds away, and Math.trunc(-0.1) is -0.
+    expect(formatValue(-0.1, "$# ?/2")).toBe("-$0      ")
+    // A format that writes its own "-" gets no second one.
+    expect(formatValue(-3, "-$# ?/?")).toBe("-$3")
   })
 })
 
