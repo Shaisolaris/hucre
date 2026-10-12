@@ -81,6 +81,17 @@ describe("formatValue — Currency", () => {
   it("currency with quoted symbol", () => {
     expect(formatValue(1234.5, '"€"#,##0.00')).toBe("€1,234.50")
   })
+
+  it("puts the minus sign ahead of a literal prefix", () => {
+    // A single-section format has no negative section to place the sign, so
+    // it leads everything: -$1,234.50, not $-1,234.50.
+    expect(formatValue(-1234.5, "$#,##0.00")).toBe("-$1,234.50")
+    expect(formatValue(-1234.5, '"€"#,##0.00')).toBe("-€1,234.50")
+    expect(formatValue(-1, '"x"0')).toBe("-x1")
+    expect(formatValue(-1.5, "$# ?/?")).toBe("-$1 1/2")
+    expect(formatValue(-0.5, "$?/?")).toBe("-$1/2")
+    expect(formatValue(-2, "$# ?/?")).toBe("-$2")
+  })
 })
 
 // ── Percentage ──────────────────────────────────────────────────────
